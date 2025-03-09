@@ -74,5 +74,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 💡 **Tip**: You can print the QR code and display it in your home or business to make WiFi access easier!
 
 ## 🌍 Website Access
-➡️ [Visit the site here]([https:///](https://Mohammed-ES.github.io/Network_QR_Generator/)) 🌐
+➡️ [Visit the site here]([https:///](https://mohammed-es.github.io/Network_QR_Generator/)) 🌐
 
