@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wi-Fi QR Code Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #4a6fa5;
+            --secondary-color: #166088;
+            --accent-color: #4fc3dc;
+            --background-color: #f5f7fa;
+            --text-color: #333;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: var(--background-color);
+        }
+        
+        .container {
+            position: relative;
+            width: 100%;
+            max-width: 1000px;
+            min-height: 600px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            padding: 30px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+            z-index: 10;
+        }
+        
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+        
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        label {
+            font-weight: 500;
+            color: var(--text-color);
+        }
+        
+        input, select {
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+            transition: border 0.3s ease;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+        
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 15px;
+            text-align: center;
+            display: none;
+        }
+        
+        .qr-container {
+            text-align: center;
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        #qrcode {
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 0 auto;
+            max-width: 200px;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Animation bubbles */
+        .bubbles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+        
+        .bubble {
+            position: absolute;
+            bottom: -100px;
+            width: 40px;
+            height: 40px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: rise 15s infinite ease-in;
+        }
+        
+        .bubble:nth-child(1) {
+            width: 40px;
+            height: 40px;
+            left: 10%;
+            animation-duration: 8s;
+        }
+        
+        .bubble:nth-child(2) {
+            width: 20px;
+            height: 20px;
+            left: 20%;
+            animation-duration: 5s;
+            animation-delay: 1s;
+        }
+        
+        .bubble:nth-child(3) {
+            width: 50px;
+            height: 50px;
+            left: 35%;
+            animation-duration: 7s;
+            animation-delay: 2s;
+        }
+        
+        .bubble:nth-child(4) {
+            width: 80px;
+            height: 80px;
+            left: 50%;
+            animation-duration: 11s;
+            animation-delay: 0s;
+        }
+        
+        .bubble:nth-child(5) {
+            width: 35px;
+            height: 35px;
+            left: 55%;
+            animation-duration: 6s;
+            animation-delay: 1s;
+        }
+        
+        .bubble:nth-child(6) {
+            width: 45px;
+            height: 45px;
+            left: 65%;
+            animation-duration: 8s;
+            animation-delay: 3s;
+        }
+        
+        .bubble:nth-child(7) {
+            width: 25px;
+            height: 25px;
+            left: 75%;
+            animation-duration: 7s;
+            animation-delay: 2s;
+        }
+        
+        .bubble:nth-child(8) {
+            width: 80px;
+            height: 80px;
+            left: 80%;
+            animation-duration: 6s;
+            animation-delay: 1s;
+        }
+        
+        @keyframes rise {
+            0% {
+                bottom: -100px;
+                transform: translateX(0);
+            }
+            50% {
+                transform: translateX(100px);
+            }
+            100% {
+                bottom: 1080px;
+                transform: translateX(-200px);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .card {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="bubbles">
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+        </div>
+        
+        <div class="card">
+            <h1>Wi-Fi QR Code Generator</h1>
+            
+            <form id="wifiForm" action="saveWifi.php" method="post">
+                <div class="form-group">
+                    <label for="ssid">Wi-Fi Name (SSID)</label>
+                    <input type="text" id="ssid" name="ssid" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password">
+                </div>
+                
+                <div class="form-group">
+                    <label for="encryption">Encryption Type</label>
+                    <select id="encryption" name="encryption">
+                        <option value="WPA">WPA/WPA2/WPA3</option>
+                        <option value="WEP">WEP</option>
+                        <option value="nopass">None</option>
+                    </select>
+                </div>
+                
+                <div class="success-message" id="saveMessage">Wi-Fi details saved successfully!</div>
+            </form>
+            
+            <div class="qr-container" id="qrContainer" style="display: none;">
+                <div id="qrcode"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const qrContainer = document.getElementById('qrContainer');
+            const ssidInput = document.getElementById('ssid');
+            const passwordInput = document.getElementById('password');
+            const encryptionSelect = document.getElementById('encryption');
+            const wifiForm = document.getElementById('wifiForm');
+            const saveMessage = document.getElementById('saveMessage');
+            
+            let qrcode = null;
+            let debounceTimer;
+            
+            // Function to generate QR code
+            function generateQRCode() {
+                const ssid = ssidInput.value.trim();
+                if (!ssid) {
+                    qrContainer.style.display = 'none';
+                    return;
+                }
+                
+                const password = passwordInput.value;
+                const encryption = encryptionSelect.value;
+                
+                // Clear previous QR code
+                const qrcodeDiv = document.getElementById('qrcode');
+                qrcodeDiv.innerHTML = '';
+                
+                // Format Wi-Fi string: WIFI:T:WPA;S:mynetwork;P:mypass;;
+                let wifiString = `WIFI:S:${ssid};`;
+                
+                if (encryption !== 'nopass') {
+                    wifiString += `T:${encryption};`;
+                    if (password) {
+                        wifiString += `P:${password};`;
+                    }
+                } else {
+                    wifiString += 'T:nopass;';
+                }
+                
+                wifiString += ';';
+                
+                // Generate QR code
+                qrcode = new QRCode(qrcodeDiv, {
+                    text: wifiString,
+                    width: 200,
+                    height: 200,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+                
+                // Show QR container
+                qrContainer.style.display = 'flex';
+                
+                // Save Wi-Fi details
+                saveWiFiDetails();
+            }
+            
+            // Function to save Wi-Fi details
+            function saveWiFiDetails() {
+                const formData = new FormData(wifiForm);
+                
+                fetch('saveWifi.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        saveMessage.style.display = 'block';
+                        setTimeout(() => {
+                            saveMessage.style.display = 'none';
+                        }, 3000);
+                    } else {
+                        console.error('Error saving Wi-Fi details:', data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            }
+            
+            // Event listeners for input changes with debounce
+            function debounceGenerateQR() {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(generateQRCode, 500);
+            }
+            
+            ssidInput.addEventListener('input', debounceGenerateQR);
+            passwordInput.addEventListener('input', debounceGenerateQR);
+            encryptionSelect.addEventListener('change', debounceGenerateQR);
+            
+            // Prevent form submission
+            wifiForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                generateQRCode();
+            });
+        });
+    </script>
+</body>
+</html>
